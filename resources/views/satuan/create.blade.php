@@ -1,0 +1,34 @@
+@include('layouts.header')
+  <!-- Content -->
+
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">{{ $data['menu'] }}/</span> {{ $data['submenu'] }}</h4>
+
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+      <!-- Basic Layout -->
+      <div class="col-xxl">
+        <div class="card mb-4">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">{{ $data['submenu'] }}</h5>
+          </div>
+            <form action="{{ route('satuan.store') }}" method="POST">
+              @csrf
+              <div class="card-body">
+                  <div class="form-group">
+                      <label for="nama_satuan">Nama Satuan</label>
+                      <input type="text" class="form-control" name="nama_satuan" placeholder="Masukan Nama Satuan" required>
+                  </div>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer text-right">
+                  <a href="{{ route('satuan.index') }}" class="btn btn-warning">Batal</a>
+                  <button type="submit" class="btn btn-primary">Simpan</button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / Content -->
+@include('layouts.footer')
