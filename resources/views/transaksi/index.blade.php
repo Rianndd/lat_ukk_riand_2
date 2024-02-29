@@ -45,8 +45,9 @@
                                     <td class="text-center">{{ $row->created_at }}</td>
                                     <td align="center">
                                         <div class="d-flex justify-content-center">
-                                            <a href="{{ route('transaksi.edit', $row->id) }}"
-                                                class="btn btn-sm btn-warning"><i class="bx bx-data me-1"></i> Detail</a>
+                                            <a href="{{ route('transaksi.edit', $row->id) }}" class="btn btn-primary btn-sm">
+                                                <i class="bx bx-data"></i> Detail
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -67,7 +68,7 @@
     }
 </script>
 
-<!-- Modal -->
+<!-- Modal Transaksi -->
 <div class="modal modal-top fade" id="transaksi" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog">
         <form class="modal-content">

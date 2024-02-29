@@ -95,21 +95,6 @@ class TransaksiController extends Controller
         if (!empty($transaksiDetails)) {
             temp::truncate();
         }
-
-        // Load view halaman nota dan konversi menjadi HTML
-        $html = view('transaksi.nota', compact('transaksi', 'transaksiDetails'))->render();
-
-        // Buat objek PDF
-        $pdf = PDF::loadHtml($html);
-
-        // Render PDF
-        $pdf->setPaper('A8', 'portrait');
-        $pdf->render();
-
-        // Simpan PDF dalam file
-        $pdf->save(public_path('nota_transaksi.pdf'));
-        // return redirect()->route('transaksi.index')->with('success', 'Transaksi Berhasil Disimpina');
-        //Load halaman nota
         return view('transaksi.nota', compact('transaksi', 'transaksiDetails'));
     }
 
@@ -142,19 +127,14 @@ class TransaksiController extends Controller
      */
     public function edit($id)
     {
-        $transaksi = Transaksi::find($id);
-        $produk = Produk::get();
-        $id_produk = request('id_produk');
-        $produk_detail = Produk::find($id_produk);
+        $transaksi = Transaksi::with('transaksiDetails')->find($id);
 
-        $data = [
-            'title' => 'Tambah Transaksi',
-            'menu' => 'Transaksi',
-            'submenu' => 'Tambah Transaksi',
-            'contoh_user' => 'contoh nama',
-        ];
+        // Pastikan transaksi dengan id yang diberikan ditemukan
+        if (!$transaksi) {
+            return redirect()->route('transaksi.index')->with('error', 'Transaksi tidak ditemukan');
+        }
 
-        return view('transaksi.create', compact('data', 'produk', 'produk_detail', 'transaksi'));
+        return view('transaksi.detail', compact('transaksi'));
     }
 
     /**

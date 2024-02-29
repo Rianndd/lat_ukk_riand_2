@@ -33,7 +33,7 @@
                                 </option>
                                 @foreach ($produk as $row)
                                     <option value="{{ $row->id }}">
-                                        {{ $row->nama_produk }}
+                                        {{ $row->nama_produk }} - Stok {{ $row->stok }}
                                     </option>
                                 @endforeach
                             </select>
@@ -54,7 +54,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header bg-primary pb-1">
-                    <h6 class="text-white">Halo Contoh Nama User</h6>
+                    <h6 class="text-white">E - Kasir nih</h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
