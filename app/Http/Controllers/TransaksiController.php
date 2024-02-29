@@ -24,7 +24,7 @@ class TransaksiController extends Controller
         $data = [
             'title' => 'Data Transaksi',
             'menu' => 'Transaksi',
-            'submenu' => 'Data Supplier',
+            'submenu' => 'Data Transaksi',
             'contoh_user' => 'contoh nama',
         ];
 
@@ -65,41 +65,52 @@ class TransaksiController extends Controller
         $transaksi->kembalian = $request->input('kembalian');
         $transaksi->save();
 
-
-        // Ambil data dari tabel temp dan simpan ke TransaksiDetail
+        // Ambil data dari tabel temp
         $pindahTemp = temp::all(); // Ambil semua data dari tabel temp
-        foreach ($pindahTemp as $row) {
-            $transaksiDetail = new TransaksiDetail();
-            $transaksiDetail->id_transaksi = $transaksi->id;
-            $transaksiDetail->id_produk = $row->id_produk;
-            $transaksiDetail->jumlah = $row->jumlah;
-            $transaksiDetail->save();
 
-            // Kurangi stok produk
+        // Inisialisasi variabel untuk menyimpan transaksi detail yang valid
+        $transaksiDetails = [];
+
+        foreach ($pindahTemp as $row) {
+            // Cek apakah produk masih tersedia
             $produk = Produk::find($row->id_produk);
-            $produk->stok -= $row->jumlah;
-            $produk->save();
+            if ($produk && $produk->stok >= $row->jumlah) {
+                // Jika produk masih tersedia, tambahkan ke transaksi detail
+                $transaksiDetail = new TransaksiDetail();
+                $transaksiDetail->id_transaksi = $transaksi->id;
+                $transaksiDetail->id_produk = $row->id_produk;
+                $transaksiDetail->jumlah = $row->jumlah;
+                $transaksiDetail->save();
+
+                // Kurangi stok produk
+                $produk->stok -= $row->jumlah;
+                $produk->save();
+
+                // Tambahkan ke array transaksi detail yang valid
+                $transaksiDetails[] = $transaksiDetail;
+            }
         }
 
-        // Hapus data dari tabel Keranjang Belanja (temp)
-        temp::truncate();
+        // Hapus data dari tabel Keranjang Belanja (temp) hanya jika ada produk yang valid
+        if (!empty($transaksiDetails)) {
+            temp::truncate();
+        }
 
-        // Load view dan konversi menjadi HTML
-        $html = view('transaksi.nota', compact('transaksi'))->render();
+        // Load view halaman nota dan konversi menjadi HTML
+        $html = view('transaksi.nota', compact('transaksi', 'transaksiDetails'))->render();
 
         // Buat objek PDF
         $pdf = PDF::loadHtml($html);
 
         // Render PDF
-        $pdf->setPaper('A8', 'portrait'); // Atur ukuran kertas ke A8 (seukuran struk) dan orientasinya menjadi portrait
+        $pdf->setPaper('A8', 'portrait');
         $pdf->render();
 
-        // Simpan atau kirim PDF ke browser
-        $pdf->stream('nota_transaksi.pdf');
-
-        // Redirect pengguna kembali ke halaman indeks
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan.');
-
+        // Simpan PDF dalam file
+        $pdf->save(public_path('nota_transaksi.pdf'));
+        // return redirect()->route('transaksi.index')->with('success', 'Transaksi Berhasil Disimpina');
+        //Load halaman nota
+        return view('transaksi.nota', compact('transaksi', 'transaksiDetails'));
     }
 
     /**
@@ -136,12 +147,12 @@ class TransaksiController extends Controller
         $id_produk = request('id_produk');
         $produk_detail = Produk::find($id_produk);
 
-            $data = [
-                'title' => 'Tambah Transaksi',
-                'menu' => 'Transaksi',
-                'submenu' => 'Tambah Transaksi',
-                'contoh_user' => 'contoh nama',
-            ];
+        $data = [
+            'title' => 'Tambah Transaksi',
+            'menu' => 'Transaksi',
+            'submenu' => 'Tambah Transaksi',
+            'contoh_user' => 'contoh nama',
+        ];
 
         return view('transaksi.create', compact('data', 'produk', 'produk_detail', 'transaksi'));
     }

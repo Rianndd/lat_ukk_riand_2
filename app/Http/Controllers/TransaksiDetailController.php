@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\temp;
+use App\Models\Transaksi;
 use App\Models\TransaksiDetail;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TransaksiDetailController extends Controller
 {
@@ -14,7 +17,7 @@ class TransaksiDetailController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -34,18 +37,7 @@ class TransaksiDetailController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_produk' => 'required',
-        ]);
-
-        TransaksiDetail::create([
-            'id_transaksi' => $request->id_transaksi,
-            'id_produk' => $request->id_produk,
-            'nama_produk' => $request->nama_produk,
-            'kuantitas' => $request->kuantitas,
-            'subtotal'=> $request->subtotal, 
-        ]);
-        return redirect()->back();
+        //
     }
 
     /**

@@ -88,7 +88,6 @@
                             <thead>
                                 <tr align="center">
                                     <th width="10%">No</th>
-                                    <th>Pelanggan</th>
                                     <th>Produk</th>
                                     <th>Harga Satuan</th>
                                     <th>Qty</th>
@@ -101,7 +100,6 @@
                                 @foreach ($temp as $key => $row)
                                     <tr>
                                         <td class="text-center">{{ $key + 1 }}</td>
-                                        <td>{{ $row->pelanggan->nama_pelanggan }}</td>
                                         <td>{{ $row->produk->nama_produk }}</td>
                                         <td class="text-end">{{ number_format($row->produk->harga_jual) }}</td>
                                         <td class="text-center">{{ $row->jumlah }}</td>
@@ -124,28 +122,31 @@
                                     {{-- hidden transaksi --}}
                                     <input type="hidden" name="id_pelanggan" value="{{ $pelanggan->id }}">
                                     <tr>
-                                        <td colspan="5" class="text-end">Total Harga :</td>
+                                        <td colspan="4" class="text-end">Total Harga :</td>
                                         <td class="text-end"><input type="text" name="total_harga"
                                                 class="form-control text-end" value="{{ $total }}" readonly>
                                         </td>
+                                        <td></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="text-end">Bayar :</td>
+                                        <td colspan="4" class="text-end">Bayar :</td>
                                         <td class="text-end"><input class="form-control text-end" type="text"
                                                 id="bayar" name="bayar" oninput="hitungKembalian()"></td>
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="text-end">Kembalian :</td>
+                                        <td colspan="4" class="text-end">Kembalian :</td>
                                         <td class="text-end"><input class="form-control text-end" type="text"
                                                 id="kembalian" name="kembalian" readonly></td>
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="5" class="text-end">Klik ini untuk checkout :</td>
-                                        <td class="text-center"><button type="submit"
-                                                class="btn btn-primary ms-2"><i class="bx bx-check">
-                                                    Checkout</i></button></td>
+                                        <td colspan="4" class="text-end">Klik ini untuk checkout :</td>
+                                        <td class="text-center">
+                                            <button type="submit" class="btn btn-primary ms-2"><i
+                                                    class="bx bx-check"> Simpan</i>
+                                            </button>
+                                        </td>
                                         <td></td>
                                     </tr>
                                 </form>
