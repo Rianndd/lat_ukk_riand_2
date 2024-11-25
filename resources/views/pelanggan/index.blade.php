@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-md-6 text-end">
                             <a href="{{ route('pelanggan.create') }}" class="btn btn-primary"><i class="bx bx-plus"></i>
-                                Tambah Data</a>
+                                Tambah Dataa</a>
                         </div>
                     </div>
                 </div>
